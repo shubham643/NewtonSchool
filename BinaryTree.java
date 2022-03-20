@@ -1,10 +1,14 @@
 // create -- DONE
-// traversal -- DONE
+// traversal -- DONE in, post, pre, level
 // search == DONE
 // path -- DONE
 // height -- DONE
-// diameter
+// diameter -- DONE max distance between any 2 nodes of a binary tree O(n^2), O(n)
 // LCA - paths, general
+//  1. via printing path of diameter (doesn't work)
+//  2. storing path of both nodes in array and then finding last common element ( O(n)) with O(n) space
+//  3. Using traversal O(n)
+// level order - to be discussed in graphs (BFS)
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +135,57 @@ class BinaryTree {
         ll.remove(ll.size()-1);
     }
 
+    public int LCA(int a, int b) {
+//        return LCAUtil(root, a, b);
+        return LCAOptimized(root, a, b).value;
+    }
+
+    private int LCAUtil(Node root, int a, int b) { // time O(n), Space complexity O(n)
+        ArrayList<Integer> lFirst = new ArrayList<>();
+        ArrayList<Integer> lSecond = new ArrayList<>();
+
+        pathUtil(root, a, lFirst);
+        pathUtil(root, b, lSecond);
+
+        int result = Integer.MIN_VALUE;
+        for(int i = 0; i < Math.min(lFirst.size(), lSecond.size()); i++) {
+            if (lFirst.get(i) != lSecond.get(i)) {
+                result = lFirst.get(i-1);
+            }
+        }
+        if (result == Integer.MIN_VALUE) {
+            // print the last element of the small list
+            result = lFirst.get(Math.min(lFirst.size(), lSecond.size()) - 1);
+        }
+        return result;
+    }
+
+    private Node LCAOptimized(Node root, int a, int b) { // O() ?
+        // base conditions
+        if (root == null) {
+            return null;
+        }
+        if (root.value == a) {
+            return root;
+        }
+        if (root.value == b) {
+            return root;
+        }
+
+        Node ll = LCAOptimized(root.left, a, b);
+        Node rr = LCAOptimized(root.right, a, b);
+
+        // call for left and right
+        if (ll != null && rr != null) {
+            return root;
+        }
+        return ll != null ? ll : rr;
+//        if (ll != null) {
+//            return ll;
+//        }
+//        return rr;
+    }
+
     public int height() { // O(n)
 //         max(height(left), height(right)) + 1
         return heightUtil(root);
@@ -168,7 +223,7 @@ class BinaryTree {
         return Math.max(lMax, Math.max(rMax, 1 + lHeight + rHeight));
     }
 
-    private int diamterOptimized(Node root, Height h) { // h is height from below // O(n)
+    private int diamterOptimized(Node root, Height h) { // h is height from below // O(n) // it assumes both a, b are in the tree
         // base case
         if (root == null) {
             h.h = 0;
@@ -202,6 +257,8 @@ public class BinaryTreeGeneric {
         System.out.print("Height of tree is " + tree.height());
         System.out.println();
         System.out.print("Diameter of tree is " + tree.diameter());
+        System.out.println();
+        System.out.print("LCA of nodes is " + tree.LCA(5, 2));
         System.out.println();
     }
 }
