@@ -8,10 +8,22 @@
 //  1. via printing path of diameter (doesn't work)
 //  2. storing path of both nodes in array and then finding last common element ( O(n)) with O(n) space
 //  3. Using traversal O(n)
-// level order - to be discussed in graphs (BFS)
+// 21st march -- https://1drv.ms/u/s!ApNLaUHTgtzbkHH2K9Cpl93wwOau?e=tgwSAl
+// Array representation of a tree - rarely --> left = 2i+1, right=2i+2, parent = i/2.
+// Mirror tree -- DONE
+// 1. call recursively and then swap left and right (preorder or postorder)
+// 2. Using level order
+// level order - (BFS) --> using Queues DONE
+// Given 2 traversals, construct tree from them
+// 1. pre + in
+// 2. post + in
+// Balanced BST
+// 1. normal bst height is O(n) and all operations (search, insert, delete) O(n)
+// 2. balanced bst height is O(logn) and all operations (search, insert, delete) O(logn)
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 class Node {
     int value;
@@ -239,6 +251,114 @@ class BinaryTree {
 
         return Math.max(leftResult, Math.max(rightResult, lH.h + rH.h + 1));
     }
+
+    public void mirrorTree() {
+        mirrorTreeUtil(root);
+    }
+
+    private void mirrorTreeUtil(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        // swap
+        Node temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+
+        mirrorTreeUtil(root.left);
+        mirrorTreeUtil(root.right);
+    }
+
+    public void levelOrderTraversal() { // BFS. O(n)
+        Queue<Node> q = new LinkedList<>();
+        // add root in q
+        q.add(root);
+        while(!q.isEmpty()) {
+            Node first = q.peek();
+            q.remove();
+            System.out.print(first.value);
+            // push left and right
+            if (first.left != null) {
+                q.add(first.left);
+            }
+            if (first.right != null) {
+                q.add(first.right);
+            }
+        }
+    }
+
+    static int preIndex = 0;
+    public Node createFromInAndPre(ArrayList<Integer> inorder, ArrayList<Integer> preorder) {
+        return createFromInAndPreUtil(inorder, preorder, 0, inorder.size()-1);
+    }
+
+    private Node createFromInAndPreUtil(ArrayList<Integer> inorder, ArrayList<Integer> preorder,
+                                        int inStart, int inEnd) {
+        // base case
+        if (inStart > inEnd) {
+            return null;
+        }
+        Node temp = new Node(preorder.get(preIndex));
+        int index = searchIndex(inorder, preorder.get(preIndex), inStart, inEnd);
+        preIndex++;
+        temp.left = createFromInAndPreUtil(inorder, preorder, inStart, index-1);
+        temp.right = createFromInAndPreUtil(inorder, preorder, index+1, inEnd);
+        return temp;
+    }
+
+    public Node createFromInAndPost(ArrayList<Integer> inorder, ArrayList<Integer> postorder) {
+        return createFromInAndPostUtil(inorder, postorder, 0, inorder.size()-1, 0, postorder.size()-1);
+    }
+
+    private Node createFromInAndPostUtil(ArrayList<Integer> inorder, ArrayList<Integer> postorder,
+                                         int inStart, int inEnd,
+                                         int postStart, int postEnd) {
+        // base case
+        if (inStart > inEnd) {
+            return null;
+        }
+        // last element of post order
+        Node temp = new Node(postorder.get(postEnd));
+        // find the left part and the right part.
+        // find size of left subtree and right subtree
+        int index = searchIndex(inorder, postorder.get(postEnd), inStart, inEnd);
+        int sizeLeftSubtree = index - inStart;
+        int sizeRightSubtree = inEnd - index;
+        temp.left = createFromInAndPostUtil(inorder, postorder, inStart, index-1, postStart, postStart + sizeLeftSubtree-1);
+        temp.right = createFromInAndPostUtil(inorder, postorder, index+1, inEnd, postStart + sizeLeftSubtree, postEnd);
+        return temp;
+    }
+
+    private int searchIndex(ArrayList<Integer> inorder, int val, int inStart, int inEnd) {
+        for(int i = inStart; i <= inEnd; i++) {
+            if (inorder.get(i) == val) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void mirrorUsingLevelOrder() { // BFS. O(n)
+        Queue<Node> q = new LinkedList<>();
+        // add root in q
+        q.add(root);
+        while(!q.isEmpty()) {
+            Node first = q.peek();
+            q.remove();
+//            System.out.print(first.value);
+            // push left and right
+            Node temp = first.left;
+            first.left = first.right;
+            first.right = temp;
+            if (first.left != null) {
+                q.add(first.left);
+            }
+            if (first.right != null) {
+                q.add(first.right);
+            }
+        }
+    }
 }
 
 public class BinaryTreeGeneric {
@@ -260,5 +380,15 @@ public class BinaryTreeGeneric {
         System.out.println();
         System.out.print("LCA of nodes is " + tree.LCA(5, 2));
         System.out.println();
+        tree.mirrorTree();
+        tree.inorder();
+        System.out.println();
+        tree.levelOrderTraversal();
+        System.out.println();
+        tree.mirrorUsingLevelOrder();
+        tree.inorder();
+        System.out.println();
+
+
     }
 }
