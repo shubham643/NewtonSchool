@@ -13,7 +13,6 @@ import java.util.*;
 class GraphAdjacencyMatrix {
     int[][] graph;
 
-
     public GraphAdjacencyMatrix() { // constructor is creating graph
         Scanner sc = new Scanner(System.in);
         System.out.println("input number of nodes");
@@ -102,10 +101,11 @@ class GraphAdjacencyList {
             visited[i] = false;
         }
         // we need to traverse whole graph.
-        for(int start = 0; start < n; start++) {
+        for(int start = 0; start < n; start++) { // to handle disconnected graphs
             // start bfs considering start as source node
-            q.add(start);
+
             if (!visited[start]) {
+                q.add(start);
                 visited[start] = true;
                 bfs_util(q, visited);
             }
@@ -127,6 +127,115 @@ class GraphAdjacencyList {
             }
         }
     }
+
+    public void dfs() { // O(n+e)
+        int n = graph.size();
+        // print bfs of tree
+        Stack<Integer> stk = new Stack<>();
+        boolean[] visited = new boolean[n];
+        for(int i = 0; i < n; i++) {
+            visited[i] = false;
+        }
+        // we need to traverse whole graph.
+        for(int start = 0; start < n; start++) { // to handle disconnected graphs
+            // start bfs considering start as source node
+            if (!visited[start]) {
+                stk.add(start);
+                visited[start] = true;
+                dfs_util(stk, visited);
+            }
+        }
+    }
+    private void dfs_util(Stack<Integer> stk, boolean[] visited) {
+        while(!stk.isEmpty()) {
+            // pop first element
+            int front = stk.pop();
+            // print element
+            System.out.print(front);
+            // push connected non-visited nodes in queue
+            for(int i = 0; i < graph.get(front).size(); i++) {
+                int element = graph.get(front).get(i);
+                if (!visited[element]) {
+                    stk.add(element);
+                    visited[element] = true;
+                }
+            }
+        }
+    }
+
+    public int distance(int source, int destination) {
+        int n = graph.size();
+        // print bfs of tree
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] visited = new boolean[n];
+        for(int i = 0; i < n; i++) {
+            visited[i] = false;
+        }
+        q.add(source);
+        q.add(-1);
+        visited[source] = true;
+        int distance = 0;
+        while(q.size() != 1) {
+            int front = q.remove();
+            // print element
+            if (front == -1) {
+                distance++;
+                q.add(-1);
+                continue;
+            }
+            for(int i = 0; i < graph.get(front).size(); i++) {
+                int element = graph.get(front).get(i);
+                if (element == destination) {
+                    return distance;
+                }
+                if (!visited[element]) {
+                    q.add(element);
+                    visited[element] = true;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    class Pair {
+        int x;
+        int y;
+        public Pair(int a, int b) {
+            x = a;
+            y = b;
+        }
+    }
+    
+    public boolean isConnected(int[][] mat) {
+        int rows = 5;
+        int columns = 10;
+        Pair source = new Pair(0,0);
+        Pair destination = new Pair(4,9);
+        Queue<Pair> q = new LinkedList<>();
+        q.add(source);
+        while(!q.isEmpty()) {
+            Pair node = q.remove();
+            if (node.x == destination.x && node.y == destination.y) {
+                return true;
+            }
+            Pair temp;
+            // try right side
+            if (node.y != 9) {
+                // it is not the rightmost column
+                temp = new Pair(node.x, node.y+1);
+            }
+            // try down side
+            if (node.x != 4) {
+                // it is not the downmost row
+                temp = new Pair(node.x+1, node.y);
+            }
+            if (mat[temp.x][temp.y] == 0) {
+                q.add(temp);
+            }
+        }
+        return false;
+    }
+    
 }
 
 public class GraphDS {
