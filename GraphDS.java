@@ -7,7 +7,10 @@
 // bfs/dfs
 // tree is non-cyclic directed graph
 // Representation - 1. adjacency matrix, 2. adjacency list
+// 27 March - dfs, bfs, grid problem, snake and ladder problem
+// 28 March - dfs recursion, cycle in directed and undirected graph
 
+// 28th march
 import java.util.*;
 
 class GraphAdjacencyMatrix {
@@ -196,7 +199,7 @@ class GraphAdjacencyList {
         }
         return -1;
     }
-    
+
     class Pair {
         int x;
         int y;
@@ -205,7 +208,7 @@ class GraphAdjacencyList {
             y = b;
         }
     }
-    
+
     public boolean isConnected(int[][] mat) {
         int rows = 5;
         int columns = 10;
@@ -235,7 +238,96 @@ class GraphAdjacencyList {
         }
         return false;
     }
-    
+
+    class ParentNodePair {
+        int parent;
+        int node;
+        public ParentNodePair(int a, int b) {
+            parent = b;
+            node = a;
+        }
+    }
+
+    public boolean detectCycleUndirected() { // O(v + e)
+        // taking BFS approach.
+        int n = graph.size();
+        Queue<ParentNodePair> q = new LinkedList<>(); // for dfs, it would either be stack or recursion.
+        boolean[] visited = new boolean[graph.size()];
+        for(int i = 0; i < n; i++) {
+            visited[i] = false;
+        }
+        for(int i = 0; i < graph.size(); i++) {
+            if (!visited[i]) {
+                // add in queue
+                visited[i] = true;
+                q.add(new ParentNodePair(i, -1));
+                if (detectCycleUndirectedUtil(q, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean detectCycleUndirectedUtil(Queue<ParentNodePair> q, boolean visited[]) {
+        while(!q.isEmpty()) {
+            ParentNodePair pp = q.remove();
+            // push its connected elements to queue
+            for(int i = 0; i < graph.get(pp.node).size(); i++) { // traverse adjacency list of node
+                int dest = graph.get(pp.node).get(i);
+                if (visited[dest] && dest != pp.parent) {
+                    // it means there is a cycle
+                    return true;
+                }
+                // push this into queue
+                q.add(new ParentNodePair(dest, pp.node));
+                visited[dest] = true;
+            }
+        }
+        return false;
+    }
+
+    public boolean detectCycleDirected() {
+        int n = graph.size();
+        // we will use DFS with recursion
+        boolean[] visited = new boolean[n];
+        boolean[] recVisited = new boolean[n];
+        for(int i = 0; i < n; i++) {
+            visited[i] = false;
+            recVisited[i] = false;
+        }
+        for(int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                // call dfs recursively
+                if (detectCycleDirectedUtil(i, visited, recVisited, n)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean detectCycleDirectedUtil(int node, boolean[] visited, boolean[] recVisited, int n) {
+        // base case
+        if (recVisited[node]) {
+            return true; // there is a cycle
+        }
+        // otherwise we will proceed
+        if (visited[node]) {
+            return false;
+        }
+        // call recursively for connected nodes.
+        visited[node] = true;
+        recVisited[node] = true;
+        for(int i = 0; i < graph.get(node).size(); i++) {
+            int dest = graph.get(node).get(i);
+            if (detectCycleDirectedUtil(dest, visited, recVisited, n)) {
+                return true;
+            }
+        }
+        recVisited[node] = false;
+        return false;
+    }
 }
 
 public class GraphDS {
