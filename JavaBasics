@@ -1,0 +1,159 @@
+//decimal and binary representation
+// 1. // means comment
+// 2. variable
+// 3. datatypes
+// 4. operator -->
+    // > greater than, >= greater than or equals to
+    // < lesser than, <= lesser than or equals to
+    // = assignment operator
+    // != not equals
+    // == conditional equals
+    // +
+    // -
+    // * multiply
+    // / divide
+    // % modulus
+    // ++ increment by one
+    // -- decrease by one
+    // ||   logical OR
+    // && logical AND
+// Variable
+// Datatypes
+//integer --> int, value any integer negative to positive, 4 bytes.
+//String -> "shubham#7%    @^&"
+//float --> decimal numbers. like 1.2,100.4. 4 bytes
+//Character -> a, b, z, A, , ! @ % * - 'a'   '%', 1 byte, 0->255, 1 byte = 8 bits = 2^8 = 256 numbers
+//Double -> integer or decimal having more memory. 8 bytes
+//Boolean --> (true, false) 1 bit, true or false, 0 or 1
+//'a' -> 65 -->
+//
+//xxxx
+//1 ->1
+//2 ->10
+//3->11
+//4> 100
+// 65 -> 1000001 -> !!!!!!
+//1. binary representation, decimal -> binary, binary -> decimal
+// asdfhasdkjfhdsaifh
+/*sfasdf
+asdfasdf
+asdfdsf */
+//
+//1 2 3 4 ...  100
+/*
+This is my first java program
+i am loving it
+ */
+public class JavaBasics {
+    public static void main(String[] args) {
+        int age = 10; // int is datatype, age is variable.
+        age = 9;
+        age = 0;
+        int x = -1;
+
+        double a = 1.567;
+        float fff = 5;
+        float ff = (float) 1.23;
+        float ffx = 1.23f;
+        boolean amIOld = false;
+        boolean IsWarGoingInWorld = true; // true -> 1, false -> 0;
+
+        //operators
+        String ss = "i am shubham";
+        int abc = 10; // assignment operator
+        String newString = ss + abc; // i am shubham10
+        String newNewString = "ss + abc"; // ss + abc
+        System.out.println("newString value is " + newString); // newString value is i am shubham10
+        System.out.println("newString value is " + newNewString); // newString value is ss + abc
+
+        System.out.println("newString value is " + newString + " lol " + ss); // newString value is i am shubham10 lol i am shubham
+        System.out.println(abc); // 10
+
+        //Q: there are 2 variables ab = 5, bc = 10, print the bigger value?
+        int ab = 5;
+        int bc = 10;
+        if (ab > bc) { // logical operator 5 > 10? if condition will return false
+            System.out.println(ab); // not printed
+        } // if part ends here
+        else { // execute the else part as if condition was false
+            System.out.println(bc); // this will be printed
+        } // else part ends here
+        int first = 5;
+        int second = 5;
+        if (first == second) { // logical assignment. if first is equal to second or not.
+            System.out.println("Yes"); // executed
+        } else {
+            System.out.println("No"); // not executed
+        }
+        if (first != second) { // outcome of this statement is false, hence it will go to else part
+            System.out.println("not equal"); // executed
+        } else { // this is executed
+            System.out.println("equal"); //
+        }
+
+        int xx = 5;
+        int yy = 5;
+        if (xx >= yy) { // statement is true, execute if part
+            System.out.println("Yes");  // executed
+        } else {
+            System.out.println("No"); // not executed
+        }
+
+
+        int pqr = 5;
+        pqr = pqr + 1;
+        System.out.println(pqr); // output = 6
+        pqr = pqr*2;
+        System.out.println(pqr); // output = 12
+        pqr = pqr / 2;
+        System.out.println(pqr); // output = 6
+        pqr = pqr - 1;
+        System.out.println(pqr); // output = 5
+        int test = pqr % 3; // modulus, 5%3 = 2
+        System.out.println(test); // output = 2
+        test++; // increment by one
+        System.out.println(test); // output = 3
+        test--; // decrement by one
+        System.out.println(test); // output = 2
+
+        // test = 2, pqr = 5.
+        int ffff = test-pqr*test; //2 - (2*5) = -8
+//        priorities,
+        // topmost %
+        // /, *
+        // +,-
+        System.out.println(ffff); // output = -8
+
+        // logical operators ||, &&
+        int qw = 5;
+        int we = 10;
+        if (qw >= 5 && we <= 10) { // && means logical AND --> True && True = True, hence execute if part
+            System.out.println("Yes"); // execute
+        } else {
+            System.out.println("No"); // don't execute
+        }
+        if (qw >= 5 || we < 10) { // || means logical OR --> True || False = True, hence execute if part
+            System.out.println("Yes"); // execute
+        } else {
+            System.out.println("No"); // don't execute
+        }
+    }
+    // && both should be true
+    // false && false = false
+    // false && true = false'
+    // true && true = true
+    // true && false = false
+    // || either can be true
+    // false || false = false
+    // false || true = true'
+    // true || true = true
+    // true || false = true
+
+    // syntax
+
+    // how variables are stored in memory
+
+}
+
+//// HTML
+//<body> i am shubham </body>
