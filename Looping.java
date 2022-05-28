@@ -1,3 +1,5 @@
+// https://onedrive.live.com/redir?resid=DBDC82D341694B93%212183&page=Edit&wd=target%28Quick%20Notes.one%7C84dd2ba1-eb01-41dc-bf16-9fba7091089a%2FUntitled%20Page%7Ca09352af-c4ff-4eca-b03e-e1f58ed73ed3%2F%29
+
 // class name = <file name>.java
 // syntax
 // comments.
