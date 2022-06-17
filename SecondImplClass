@@ -1,0 +1,204 @@
+//// Remove Outermost Parentheses
+
+import java.io.*; // for handling input/output
+import java.util.*; // contains Collections framework
+
+// don't change the name of this class
+// you can add inner classes if needed
+class Main {
+	public static void main (String[] args) {
+                      // Your code here
+
+		// (()())(())
+
+		// ((())())()(())
+
+		//  result = (())()()
+
+		Scanner sc = new Scanner(System.in);
+		String s = sc.nextLine();
+		int length = s.length();
+
+		// solution 1 using count
+		// int counter = 0;
+		// int starting = 0;
+		// int i = 0;
+		// String res = "";
+		// while(i < length) {
+		// 	if (s.charAt(i) == '(') {
+		// 		counter++;
+		// 	} else {
+		// 		counter--;
+		// 	}
+		// 	if (counter == 0) {
+		// 		// found valid parenthesis from st to i
+		// 		res += s.substring(starting+1, i); // endIndex is exclusive
+		// 		starting = i+1;
+		// 	}
+		// 	i++;
+		// }
+		// System.out.print(res);
+
+		// 2. using stack... it uses extra space of O(n)
+		Stack<Character> stk = new Stack<>();
+        int starting = 0;
+        String res = "";
+        
+        int i = 0;
+        while(i < s.length()) {
+            // process the character
+            if (s.charAt(i) == '(') {
+                stk.push('(');
+            } else {
+                stk.pop();
+            }
+            if (stk.empty()) {
+                res += s.substring(starting+1, i);
+                starting = i+1;
+            }
+            i++;
+        }
+        System.out.print(res);
+	}
+}
+
+
+
+
+//////// Sara's Students (Contest)
+
+
+/*
+class Node {
+    Node next;
+    int val;
+
+    Node(int val) {
+        this.val = val;
+        next = null;
+    }
+}
+*/
+public static int sizeOfList(Node node) {
+    int count = 0;
+    Node temp = node; 
+    while(temp != null) {
+        count++;
+        temp = temp.next;
+    }
+    return count;
+}
+
+public static Node findNode(int i, Node node) {
+    int count = 0;
+    Node temp = node;
+    while(count < i) {
+        count++;
+        temp = temp.next;
+    }
+    return temp;
+}
+
+static class Answer {
+    public int answer;
+    public void Answer() {
+        answer = 0;
+    }
+}
+
+static Node first;
+
+public static int maxChocolates(Node head) {
+//Enter your code here
+        // 5000 = 5 * 10^3
+        // n^2 = 25 * 10^6
+        // 10^7
+        // N^2 solution will work
+
+        // 1. Normal O(n^2) solution
+        // int n = sizeOfList(head);
+        // int students = n/2;
+        // Node temp = head;
+        // int max = 0;
+        // for(int i = 0; i < students; i++) {
+        //     int firstBox = temp.val;
+        //     // find value of second box
+        //     // index of second box = n - i - 1 for zero based indexing
+        //     int secondBox = findNode(n-i-1, head).val;
+        //     int result = firstBox + secondBox;
+        //     if (result > max) {
+        //         max = result;
+        //     }
+        //     temp = temp.next;
+        // }
+        // return max;
+
+        // 2. recursive time complexity O(n) solution
+        int n = sizeOfList(head);
+
+        first = head;
+        Node ending = head;
+        Answer ans = new Answer();
+        solve(ans, ending);
+        return ans.answer;
+}
+
+public static void solve(Answer ans, Node second) {
+    if (second == null) {
+        return;
+    }
+    solve(ans, second.next); // move second pointer ahead
+    // first is on first box and second is on last box
+    int res = first.val + second.val;
+    if (res > ans.answer) {
+        ans.answer = res;
+    }
+    first = first.next;
+}
+
+
+
+//// // Q: array [1,2,3], of size n and all elements are unique, print all its permutations. 123,321,231,132,312,213
+
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class StackBased {
+
+    public static void solve(int[] arr, int n, int i) {
+        if (i == n) {
+            // base condition
+            for(int j = 0; j < n; j++) {
+                System.out.print(arr[j] + " ");
+            }
+            System.out.println();
+            return;
+        }
+        for(int j = i; j < n; j++) {
+            swap(arr, i, j);
+            solve(arr, n, i+1);
+            swap(arr, i, j);
+        }
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        // Q: array [1,2,3], of size n and all elements are unique, print all its permutations.
+        // 123,321,231,132,312,213
+
+        int n;
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        int[] arr = new int[n];
+        for(int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        solve(arr, n, 0);
+    }
+}
